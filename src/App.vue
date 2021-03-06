@@ -1,36 +1,54 @@
 <template>
   <div class="d-main">
     <h1 class="text_center">{{ title }}</h1>
+    <input
+      type="search"
+      class="filter"
+      v-on:input="filter = $event.target.value"
+      placeholder="Buscar título"
+    />
+
+    <h2>{{ filter }}</h2>
     <ul class="pic_list">
-      <li class="pic_list__item" v-for="pic of pics" :key="pic.id">
-        <div class="panel">
-          <h2 class="panel__title">
-            {{ pic.titulo }}
-          </h2>
-          <div class="panel__main">
-            <img class="image_responsive" :src="pic.url" :alt="pic.titulo" />
-          </div>
-        </div>
+      <li class="pic_list__item" v-for="pic of filterPics" :key="pic.id">
+        <panel-base :title="pic.titulo">
+          <img class="image_responsive" :src="pic.url" :alt="pic.titulo" />
+        </panel-base>
       </li>
     </ul>
   </div>
 </template>
 
-
 <script>
+import Panel from "./components/shared/panel/Panel.vue";
 export default {
+  components: {
+    "panel-base": Panel
+  },
+
   data() {
     return {
       title: "AluraPic",
       pics: [],
+      filter: ""
     };
   },
+
   created() {
     this.$http
       .get("http://localhost:3000/v1/fotos")
-      .then((res) => (this.pics = res.data))
-      .catch((err) => console.error(err));
+      .then(res => (this.pics = res.data))
+      .catch(err => console.error(err));
   },
+
+  computed: {
+    filterPics() {
+      if (!this.filter) return this.pics;
+
+      let exp = new RegExp(this.filter.trim(), "i");
+      return this.pics.filter(pic => exp.test(pic.titulo));
+    }
+  }
 };
 </script>
 
@@ -54,26 +72,8 @@ export default {
   width: 100%;
 }
 
-/* estilo do painel */
-
-.panel {
-  padding: 0 auto;
-  border: solid 2px grey;
-  display: inline-block;
-  margin: 5px;
-  box-shadow: 5px 5px 10px grey;
-  width: 200px;
-  height: 100%;
-  vertical-align: top;
-  text-align: center;
-}
-
-.panel .panel-title {
-  text-align: center;
-  border: solid 2px;
-  background: lightblue;
-  margin: 0 0 15px 0;
-  padding: 10px;
-  text-transform: uppercase;
+.filter {
+  display: block;
+  width: 100%;
 }
 </style>

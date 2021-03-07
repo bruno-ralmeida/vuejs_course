@@ -1,24 +1,25 @@
 <template>
   <div class="d-main">
-    <nav>
-      <ul>
-        <li v-for="route of routes">
-          <router-link :to="route.path ? route.path : '/'">{{ route.title }}</router-link>
-        </li>
-      </ul>
-    </nav>
-    <router-view></router-view>
+    <base-menu :routes="routes"/>
+    <transition name="page">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-import { routes } from './routes'
+import Menu from "./components/shared/menu/Menu.vue";
+import { routes } from "./routes";
 export default {
+  components: {
+    "base-menu": Menu
+  },
+
   data() {
     return {
-      routes,
-    }
-  },
+      routes
+    };
+  }
 };
 </script>
 
@@ -27,5 +28,15 @@ export default {
   font-family: Helvetica, sans-serif;
   margin: 0 auto;
   width: 96%;
+}
+
+.page-enter,
+.page-leave-active {
+  opacity: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
 }
 </style>

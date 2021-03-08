@@ -12,10 +12,14 @@
     <ul class="pic_list">
       <li class="pic_list__item" v-for="pic of filterPics" :key="pic.id">
         <panel-base :title="pic.titulo">
-          <image-responsive
-            :url="pic.url"
-            :title="pic.titulo"
-          ></image-responsive>
+          <image-responsive :url="pic.url" :title="pic.titulo" />
+          <btn-custom
+            btnType="button"
+            title="REMOVER"
+            @activateButton="removePic($event, pic)"
+            :confirm="false"
+            btnStyle="danger"
+          />
         </panel-base>
       </li>
     </ul>
@@ -25,10 +29,13 @@
 <script>
 import Panel from "../panel/Panel";
 import ImageResponsive from "../image-responsive/ImageResponsive";
+import Button from "../button/Button";
+
 export default {
   components: {
     "panel-base": Panel,
-    "image-responsive": ImageResponsive
+    "image-responsive": ImageResponsive,
+    "btn-custom": Button
   },
 
   data() {
@@ -52,6 +59,13 @@ export default {
 
       let exp = new RegExp(this.filter.trim(), "i");
       return this.pics.filter(pic => exp.test(pic.titulo));
+    }
+  },
+
+  methods: {
+    removePic($event, pic) {
+      alert($event);
+      alert(`${pic.titulo} is removed. `);
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="d-main">
-    <base-menu :routes="routes"/>
+    <base-menu :routes="routes" />
     <transition name="page">
       <router-view></router-view>
     </transition>
@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import Menu from "./components/shared/menu/Menu.vue";
+import Menu from "./components/shared/menu/Menu";
 import { routes } from "./routes";
+
 export default {
   components: {
     "base-menu": Menu

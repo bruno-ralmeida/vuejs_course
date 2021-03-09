@@ -3,6 +3,7 @@ import App from './App.vue'
 import axios from "axios";
 import VueRouter from "vue-router";
 import { routes } from './routes';
+import './components/shared/directives/Transform';
 
 Vue.prototype.$http = axios;
 Vue.use(VueRouter)

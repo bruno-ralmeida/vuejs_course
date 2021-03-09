@@ -1,5 +1,5 @@
 import Registration from './components/registration/Registration.vue'
-import Home from './components/shared/home/Home.vue'
+import Home from './components/home/Home.vue'
 
 export const routes = [
   { path: '', component: Home, title: "Home" },

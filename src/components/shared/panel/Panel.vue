@@ -43,6 +43,7 @@ export default {
   text-transform: uppercase;
 }
 
+
 * {
   box-shadow: 5px 5px 10px black;
 }
@@ -53,6 +54,9 @@ export default {
 
 .panel_fade-enter-active, .panel_fade-leave-active  {
   transition: opacity .5s;
+}
+.panel__main{
+  overflow: hidden;
 }
 
 </style>

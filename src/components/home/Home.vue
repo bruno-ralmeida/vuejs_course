@@ -12,7 +12,7 @@
     <ul class="pic_list">
       <li class="pic_list__item" v-for="pic of filterPics" :key="pic.id">
         <panel-base :title="pic.titulo">
-          <image-responsive :url="pic.url" :title="pic.titulo" />
+          <image-responsive v-transform-custom:scale="{rotateValue: 180}" :url="pic.url" :title="pic.titulo" />
           <btn-custom
             btnType="button"
             title="REMOVER"
@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import Panel from "../panel/Panel";
-import ImageResponsive from "../image-responsive/ImageResponsive";
-import Button from "../button/Button";
+import Panel from "../shared/panel/Panel";
+import ImageResponsive from "../shared/image-responsive/ImageResponsive";
+import Button from "../shared/button/Button";
 
 export default {
   components: {

@@ -1,10 +1,8 @@
-const http = require('http')
-const app = require('./config/express')
-const db = require('./config/database');
-
-
+var http = require('http')
+    ,app = require('./config/express')
+    db = require('./config/database');
 
 http.createServer(app).listen(3000, function() {
-    console.log('Servidor estutando na porta: ' + this.address().port);
+    console.log('API escutando na porta: ' + this.address().port);
 });
 

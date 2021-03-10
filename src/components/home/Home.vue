@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="text_center">{{ title }}</h1>
+    <p v-show="message" class="text_center">{{ message }}</p>
     <input
       type="search"
       class="filter"
@@ -12,7 +13,11 @@
     <ul class="pic_list">
       <li class="pic_list__item" v-for="pic of filterPics" :key="pic.id">
         <panel-base :title="pic.titulo">
-          <image-responsive v-transform-custom:scale="{rotateValue: 180}" :url="pic.url" :title="pic.titulo" />
+          <image-responsive
+            v-transform-custom:scale="{ rotateValue: 180 }"
+            :url="pic.url"
+            :title="pic.titulo"
+          />
           <btn-custom
             btnType="button"
             title="REMOVER"
@@ -42,7 +47,8 @@ export default {
     return {
       title: "AluraPic",
       pics: [],
-      filter: ""
+      filter: "",
+      message: ""
     };
   },
 
@@ -64,8 +70,17 @@ export default {
 
   methods: {
     removePic($event, pic) {
-      alert($event);
-      alert(`${pic.titulo} is removed. `);
+      this.$http
+        .delete(`http://localhost:3000/v1/fotos/${pic._id}` )
+        .then(()=> {
+          let index = this.pics.indexOf(pic);
+          this.pics.splice(index, 1);
+          this.message = `Foto excluída com sucesso!`
+          
+        })
+        .catch(err => this.message = "Erro ao excluir a foto!");
+
+      
     }
   }
 };

@@ -2,7 +2,8 @@
   <div>
     <h1 class="text_center">Registration</h1>
 
-    <h2 class="text_center"></h2>
+    <h2 v-if="pic._id" class="text_center">Update Registration</h2>
+    <h2 v-else class="text_center">Insert Registration</h2>
 
     <form @submit.prevent="save()">
       <div class="control">
@@ -27,7 +28,7 @@
 
       <div class="text_center">
         <Button title="GRAVAR" btnType="submit" />
-        <router-link :to="{name: 'home'}">
+        <router-link :to="{ name: 'home' }">
           <Button title="VOLTAR" btnType="button" />
         </router-link>
       </div>
@@ -39,7 +40,7 @@
 import ImageResponsive from "../shared/image-responsive/ImageResponsive";
 import Button from "../shared/button/Button";
 import Pic from "../../domain/pic/Pic";
-import PicService from '../../domain/pic/PicService'
+import PicService from "../../domain/pic/PicService";
 
 export default {
   components: {
@@ -51,15 +52,26 @@ export default {
     return {
       pic: new Pic(),
       picService: new PicService(this.axios),
-      
+      id: this.$route.params.id
     };
+  },
+  created() {
+    if (this.id) {
+      this.picService
+        .search(this.id)
+        .then(res => (this.pic = res))
+        .catch(err => console.error(err));
+    }
   },
   methods: {
     save() {
       this.picService
-        .insert(this.pic)
-        .then(()=> this.pic = new Pic())
-        .catch(err => console.error(err))
+        .insertOrUpdate(this.pic)
+        .then(() => {
+          if (this.id) this.$router.push({ name: "home" });
+          this.pic = new Pic();
+        })
+        .catch(err => console.error(err));
     }
   }
 };

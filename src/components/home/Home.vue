@@ -18,6 +18,12 @@
             :url="pic.url"
             :title="pic.titulo"
           />
+          <router-link
+            :to="{ name: 'updateRegistration', params: { id: pic._id } }"
+          >
+            <btn-custom btnType="button" title="ALTERAR" />
+          </router-link>
+
           <btn-custom
             btnType="button"
             title="REMOVER"
@@ -35,7 +41,7 @@
 import Panel from "../shared/panel/Panel";
 import ImageResponsive from "../shared/image-responsive/ImageResponsive";
 import Button from "../shared/button/Button";
-import PicService from '../../domain/pic/PicService'
+import PicService from "../../domain/pic/PicService";
 
 export default {
   components: {
@@ -55,11 +61,10 @@ export default {
   },
 
   created() {
-    this.picService.list()
-        .then(res => this.pics = res)
-        .catch(err => console.error(err));
-    
-    
+    this.picService
+      .list()
+      .then(res => (this.pics = res))
+      .catch(err => (this.message = err.message));
   },
 
   computed: {
@@ -74,13 +79,13 @@ export default {
   methods: {
     removePic($event, pic) {
       this.picService
-          .delete(pic)
-          .then(()=> {
-            let index = this.pics.indexOf(pic);
-            this.pics.splice(index, 1);
-            this.message = `Foto excluída com sucesso!`
-          })
-          .catch(err => this.message = "Erro ao excluir a foto!");
+        .delete(pic)
+        .then(() => {
+          let index = this.pics.indexOf(pic);
+          this.pics.splice(index, 1);
+          this.message = `Foto excluída com sucesso!`;
+        })
+        .catch(err => (this.message = err.message));
     }
   }
 };

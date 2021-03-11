@@ -27,7 +27,7 @@
 
       <div class="text_center">
         <Button title="GRAVAR" btnType="submit" />
-        <router-link to="/">
+        <router-link :to="{name: 'home'}">
           <Button title="VOLTAR" btnType="button" />
         </router-link>
       </div>
@@ -39,6 +39,7 @@
 import ImageResponsive from "../shared/image-responsive/ImageResponsive";
 import Button from "../shared/button/Button";
 import Pic from "../../domain/pic/Pic";
+import PicService from '../../domain/pic/PicService'
 
 export default {
   components: {
@@ -48,13 +49,15 @@ export default {
 
   data() {
     return {
-      pic: new Pic()
+      pic: new Pic(),
+      picService: new PicService(this.axios),
+      
     };
   },
   methods: {
     save() {
-      this.$http
-        .post("http://localhost:3000/v1/fotos", this.pic)
+      this.picService
+        .insert(this.pic)
         .then(()=> this.pic = new Pic())
         .catch(err => console.error(err))
     }

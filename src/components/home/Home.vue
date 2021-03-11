@@ -35,6 +35,7 @@
 import Panel from "../shared/panel/Panel";
 import ImageResponsive from "../shared/image-responsive/ImageResponsive";
 import Button from "../shared/button/Button";
+import PicService from '../../domain/pic/PicService'
 
 export default {
   components: {
@@ -48,15 +49,17 @@ export default {
       title: "AluraPic",
       pics: [],
       filter: "",
-      message: ""
+      message: "",
+      picService: new PicService(this.axios)
     };
   },
 
   created() {
-    this.$http
-      .get("http://localhost:3000/v1/fotos")
-      .then(res => (this.pics = res.data))
-      .catch(err => console.error(err));
+    this.picService.list()
+        .then(res => this.pics = res)
+        .catch(err => console.error(err));
+    
+    
   },
 
   computed: {
@@ -70,17 +73,14 @@ export default {
 
   methods: {
     removePic($event, pic) {
-      this.$http
-        .delete(`http://localhost:3000/v1/fotos/${pic._id}` )
-        .then(()=> {
-          let index = this.pics.indexOf(pic);
-          this.pics.splice(index, 1);
-          this.message = `Foto excluída com sucesso!`
-          
-        })
-        .catch(err => this.message = "Erro ao excluir a foto!");
-
-      
+      this.picService
+          .delete(pic)
+          .then(()=> {
+            let index = this.pics.indexOf(pic);
+            this.pics.splice(index, 1);
+            this.message = `Foto excluída com sucesso!`
+          })
+          .catch(err => this.message = "Erro ao excluir a foto!");
     }
   }
 };

@@ -7,14 +7,20 @@
 
     <form @submit.prevent="save()">
       <div class="control">
-        <label for="tittle">Title</label>
-        <input v-model="pic.titulo" id="tittle" autocomplete="off" />
+        <label for="title">Title</label>
+        <ValidationProvider rules="required|min:3|max:10" v-slot="{ errors }">
+          <input v-model="pic.titulo" id="title" autocomplete="off" />
+          <span class="error">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
 
       <div class="control">
         <label for="url">URL</label>
-        <input v-model.lazy="pic.url" id="url" autocomplete="off" />
-        <ImageResponsive v-show="pic.url" :url="pic.url" :title="pic.title" />
+        <ValidationProvider rules="required" v-slot="{ errors }">
+          <input v-model.lazy="pic.url" id="url" autocomplete="off" />
+          <ImageResponsive v-show="pic.url" :url="pic.url" :title="pic.title" />
+          <span class="error">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
 
       <div class="control">
@@ -37,6 +43,7 @@
 </template>
 
 <script>
+
 import ImageResponsive from "../shared/image-responsive/ImageResponsive";
 import Button from "../shared/button/Button";
 import Pic from "../../domain/pic/Pic";
@@ -52,7 +59,8 @@ export default {
     return {
       pic: new Pic(),
       picService: new PicService(this.axios),
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      errors: []
     };
   },
   created() {
@@ -62,6 +70,8 @@ export default {
         .then(res => (this.pic = res))
         .catch(err => console.error(err));
     }
+
+   
   },
   methods: {
     save() {
@@ -91,9 +101,13 @@ export default {
 }
 
 .control label + input,
+span > input,
 .control textarea {
   width: 100%;
   font-size: inherit;
   border-radius: 5px;
+}
+.error {
+  color: red;
 }
 </style>

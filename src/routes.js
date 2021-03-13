@@ -1,4 +1,4 @@
-import Registration from "./components/registration/Registration.vue";
+const Registration = () => System.import("./components/registration/Registration.vue")
 import Home from "./components/home/Home.vue";
 
 export const routes = [

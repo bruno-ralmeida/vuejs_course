@@ -4,11 +4,11 @@
 
     <h2 v-if="pic._id" class="text_center">Update Registration</h2>
     <h2 v-else class="text_center">Insert Registration</h2>
-
-    <form @submit.prevent="save()">
+  <ValidationObserver v-slot="{ handleSubmit }">
+    <form @submit.prevent="handleSubmit(save)">
       <div class="control">
         <label for="title">Title</label>
-        <ValidationProvider rules="required|min:3|max:10" v-slot="{ errors }">
+        <ValidationProvider name="Título" rules="required|min:3|max:10" v-slot="{ errors }">
           <input v-model="pic.titulo" id="title" autocomplete="off" />
           <span class="error">{{ errors[0] }}</span>
         </ValidationProvider>
@@ -16,7 +16,7 @@
 
       <div class="control">
         <label for="url">URL</label>
-        <ValidationProvider rules="required" v-slot="{ errors }">
+        <ValidationProvider name="URL" rules="required" v-slot="{ errors }">
           <input v-model.lazy="pic.url" id="url" autocomplete="off" />
           <ImageResponsive v-show="pic.url" :url="pic.url" :title="pic.title" />
           <span class="error">{{ errors[0] }}</span>
@@ -39,6 +39,7 @@
         </router-link>
       </div>
     </form>
+    </ValidationObserver>
   </div>
 </template>
 
